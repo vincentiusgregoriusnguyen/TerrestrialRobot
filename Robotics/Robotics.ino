@@ -1,3 +1,5 @@
+#include <MeetAndroid.h>
+//declare variables for the motor pins
 //Left Motors
 int motorPin1 = 8;	
 int motorPin2 = 9;	
@@ -9,12 +11,13 @@ int motorPin01 = 4;
 int motorPin02 = 5;	
 int motorPin03 = 6;	
 int motorPin04 = 7;	
-                         
-
+                      
 int motorSpeed = 1200;  
-int count = 0;          
+int count = 0;          // count of steps made
 int countsperrev = 512; // number of steps per full revolution
 int lookup[8] = {B01000, B01100, B00100, B00110, B00010, B00011, B00001, B01001};
+
+MeetAndroid meetAndroid;
 
 void setup() {
   pinMode(motorPin1, OUTPUT);
@@ -26,53 +29,55 @@ void setup() {
   pinMode(motorPin03, OUTPUT);
   pinMode(motorPin04, OUTPUT);
   Serial.begin(9600);
+  
+  meetAndroid.registerFunction(forward,'A');
+  meetAndroid.registerFunction(reverse,'B');
+  meetAndroid.registerFunction(spinRight,'C');
+  meetAndroid.registerFunction(spinLeft,'D');
 }
 
 void loop()
 {
-  for (int i = 0; i < countsperrev; i++)
-    forward();
-  for (int i = 0; i < countsperrev; i++)
-    reverse();
-  for (int i = 0; i < countsperrev; i++)
-    spinLeft();
-  for (int i = 0; i < countsperrev; i++)
-    spinRight();
+  meetAndroid.receive();
 }
 
-void forward()
+void forward(byte flag, byte numOfValues)
 {
-  for(int i = 0; i < 8; i++)
-  {
-    setOutput1(i); 
-    delayMicroseconds(motorSpeed);
+  for(int j = 0; j < countsperrev; j++){
+      for(int i = 0; i < 8; i++){
+        setOutput1(i);
+        delayMicroseconds(motorSpeed);
+      }
   }
 }
 
-void reverse()
+void reverse(byte flag, byte numOfValues)
 {
-  for(int i = 0; i < 8; i++)
-  {
-    setOutput1(7 - i); 
-    delayMicroseconds(motorSpeed);
+  for(int j = 0; j < countsperrev; j++){
+      for(int i = 0; i < 8; i++){
+        setOutput1(7 - i); 
+        delayMicroseconds(motorSpeed);
+      }
   }
 }
 
-void spinRight()
+void spinRight(byte flag, byte numOfValues)
 {
-  for(int i = 0; i < 8; i++)
-  {
-    setOutput2(i); 
-    delayMicroseconds(motorSpeed);
+  for(int j = 0; j < 254; j++){
+      for(int i = 0; i < 8; i++){
+        setOutput2(i); 
+        delayMicroseconds(motorSpeed);
+      }
   }
 }
 
-void spinLeft()
+void spinLeft(byte flag, byte numOfValues)
 {
-  for(int i = 0; i < 8; i++)
-  {
-    setOutput2(7 - i); 
-    delayMicroseconds(motorSpeed);
+  for(int j = 0; j < 254; j++){
+      for(int i = 0; i < 8; i++){
+        setOutput2(7 - i);
+        delayMicroseconds(motorSpeed);
+      }
   }
 }
 
