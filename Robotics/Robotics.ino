@@ -1,4 +1,5 @@
 #include <MeetAndroid.h>
+#include <math.h>
 //declare variables for the motor pins
 //Left Motors
 int motorPin1 = 8;	
@@ -16,6 +17,12 @@ int motorSpeed = 1200;
 int count = 0;          // count of steps made
 int countsperrev = 512; // number of steps per full revolution
 int lookup[8] = {B01000, B01100, B00100, B00110, B00010, B00011, B00001, B01001};
+
+//used to calculate angle turns
+int wheeldiammm = 54;
+int distancebetweenwheels = 100;
+int wheelcircumference = ceil(3.1415926535*wheeldiammm);
+int robotcircumference = ceil(3.1415926535*distancebetweenwheels);
 
 MeetAndroid meetAndroid;
 
